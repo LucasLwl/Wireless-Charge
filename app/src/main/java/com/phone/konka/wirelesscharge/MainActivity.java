@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
     private ElectricityReceiver mElectricityReceiver;
+
+    private TextView mTvElectricity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class MainActivity extends Activity {
     }
 
     private void initView() {
+        mTvElectricity = (TextView) findViewById(R.id.tv_electricity);
     }
 
     @Override
@@ -73,7 +77,7 @@ public class MainActivity extends Activity {
             int current = intent.getExtras().getInt("level");
             int total = intent.getExtras().getInt("scale");
             int percent = current * 100 / total;
-            Log.i("ddd", percent + "");
+            mTvElectricity.setText(String.valueOf(percent));
         }
     }
 }
