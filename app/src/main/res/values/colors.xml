@@ -5,16 +5,15 @@
     <color name="colorAccent">#FF4081</color>
 
 
-    <color name="background">#FF073646</color>
+    <color name="background">#FF073746</color>
 
     <color name="electricity_bg">#FF4EE590</color>
 
     <color name="battery">#FF30A5FD</color>
 
-    <color name="company_color">#FFBB3C36</color>
-    <color name="title_color">#FF1EC4C9</color>
+    <color name="title_color">#21c7cb</color>
     <color name="status_color">#FF51E194</color>
 
-    <color name="electricity_color">#FFFDFDFE</color>
+    <color name="electricity_color">#4fe691</color>
 
 </resources>

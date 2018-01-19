@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -16,7 +15,6 @@ public class MainActivity extends Activity {
 
     private ElectricityReceiver mElectricityReceiver;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,10 +22,15 @@ public class MainActivity extends Activity {
 
         initState();
 
+        initView();
+
         mElectricityReceiver = new ElectricityReceiver();
         registerReceiver(mElectricityReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-        PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//        PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+    }
+
+    private void initView() {
     }
 
     @Override
@@ -67,11 +70,10 @@ public class MainActivity extends Activity {
     private class ElectricityReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-//            int current = intent.getExtras().getInt("level");
-//            int total = intent.getExtras().getInt("scale");
-//            int percent = current * 100 / total;
-//            Log.i("ddd", percent + "");
-            Log.i("ddd", "????");
+            int current = intent.getExtras().getInt("level");
+            int total = intent.getExtras().getInt("scale");
+            int percent = current * 100 / total;
+            Log.i("ddd", percent + "");
         }
     }
 }

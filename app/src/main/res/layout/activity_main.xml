@@ -1,37 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:fitsSystemWindows="true"
-    android:gravity="center_horizontal"
     android:orientation="vertical">
 
+    <com.phone.konka.wirelesscharge.FrameSurfaceView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <ImageView
+        android:id="@+id/img_company"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/company_name" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/company_name"
-        android:textColor="@color/company_color"
-        android:textSize="@dimen/text_big"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_company"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
         android:text="@string/title"
         android:textColor="@color/title_color"
         android:textSize="@dimen/text_mid"
         android:textStyle="bold" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="40"
+        android:textColor="#ffffff"
+        android:textSize="61sp" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="58dp"
         android:text="@string/status"
         android:textColor="@color/status_color"
-        android:textSize="@dimen/text_mid" />
+        android:textSize="33sp" />
 
 
-</LinearLayout>
+</RelativeLayout>

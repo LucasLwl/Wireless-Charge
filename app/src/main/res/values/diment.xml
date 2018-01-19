@@ -3,7 +3,7 @@
 
 
     <dimen name="text_big">24sp</dimen>
-    <dimen name="text_mid">22sp</dimen>
+    <dimen name="text_mid">24sp</dimen>
 
 
 </resources>

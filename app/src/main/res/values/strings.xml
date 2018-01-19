@@ -2,7 +2,72 @@
     <string name="app_name">Wireless Charge</string>
 
 
-    <string name="company_name">KONKA</string>
-    <string name="title">Wireless Charge</string>
+    <string name="title">"Wireless  Charge"</string>
     <string name="status">Charging</string>
+
+
+    <integer-array name="frame_anim">
+        <item>@drawable/anim00</item>
+        <item>@drawable/anim01</item>
+        <item>@drawable/anim02</item>
+        <item>@drawable/anim03</item>
+        <item>@drawable/anim04</item>
+        <item>@drawable/anim05</item>
+        <item>@drawable/anim06</item>
+        <item>@drawable/anim07</item>
+        <item>@drawable/anim08</item>
+        <item>@drawable/anim09</item>
+        <item>@drawable/anim10</item>
+        <item>@drawable/anim11</item>
+        <item>@drawable/anim12</item>
+        <item>@drawable/anim13</item>
+        <item>@drawable/anim14</item>
+        <item>@drawable/anim15</item>
+        <item>@drawable/anim16</item>
+        <item>@drawable/anim17</item>
+        <item>@drawable/anim18</item>
+        <item>@drawable/anim19</item>
+        <item>@drawable/anim20</item>
+        <item>@drawable/anim21</item>
+        <item>@drawable/anim22</item>
+        <item>@drawable/anim23</item>
+        <item>@drawable/anim24</item>
+        <item>@drawable/anim25</item>
+        <item>@drawable/anim26</item>
+        <item>@drawable/anim27</item>
+        <item>@drawable/anim28</item>
+        <item>@drawable/anim29</item>
+        <item>@drawable/anim30</item>
+        <item>@drawable/anim31</item>
+        <item>@drawable/anim32</item>
+        <item>@drawable/anim33</item>
+        <item>@drawable/anim34</item>
+        <item>@drawable/anim35</item>
+        <item>@drawable/anim36</item>
+        <item>@drawable/anim37</item>
+        <item>@drawable/anim38</item>
+        <item>@drawable/anim39</item>
+        <item>@drawable/anim40</item>
+        <item>@drawable/anim41</item>
+        <item>@drawable/anim42</item>
+        <item>@drawable/anim43</item>
+        <item>@drawable/anim44</item>
+        <item>@drawable/anim45</item>
+        <item>@drawable/anim46</item>
+        <item>@drawable/anim47</item>
+        <item>@drawable/anim48</item>
+        <item>@drawable/anim49</item>
+        <item>@drawable/anim50</item>
+        <item>@drawable/anim51</item>
+        <item>@drawable/anim52</item>
+        <item>@drawable/anim53</item>
+        <item>@drawable/anim54</item>
+        <item>@drawable/anim55</item>
+        <item>@drawable/anim56</item>
+        <item>@drawable/anim57</item>
+        <item>@drawable/anim58</item>
+        <item>@drawable/anim59</item>
+    </integer-array>
+
+
 </resources>
