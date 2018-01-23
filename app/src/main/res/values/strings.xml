@@ -4,6 +4,7 @@
 
     <string name="title">"Wireless  Charge"</string>
     <string name="status">Charging</string>
+    <string name="percent">%</string>
 
 
     <integer-array name="frame_anim">

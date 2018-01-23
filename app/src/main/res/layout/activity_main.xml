@@ -3,70 +3,86 @@
     android:id="@+id/rl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <com.phone.konka.wirelesscharge.FrameSurfaceView
+    <com.phone.konka.wirelesscharge.View.FrameSurfaceView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
 
-    <ImageView
-        android:id="@+id/img_company"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:src="@drawable/company_name" />
+    <View
+        android:id="@+id/view_statusBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero_height"></View>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img_company"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:text="@string/title"
-        android:textColor="@color/title_color"
-        android:textSize="@dimen/text_mid"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_statusBar">
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="bottom"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_electricity"
+        <ImageView
+            android:id="@+id/img_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:textSize="61sp"
-            android:textStyle="bold" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/company_margin_top"
+            android:src="@drawable/company_name" />
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="%"
-            android:textColor="#ffffff"
-            android:textSize="37sp"
-            android:textStyle="bold" />
+            android:layout_below="@+id/img_company"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/title"
+            android:textColor="@color/title_color"
+            android:textSize="@dimen/title_size" />
 
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="58dp"
-        android:text="@string/status"
-        android:textColor="@color/status_color"
-        android:textSize="33sp" />
+        <View
+            android:id="@+id/view_electricity"
+            android:layout_width="@dimen/electricity_bg_width"
+            android:layout_height="@dimen/zero_height"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/electricity_bg_margin_bottom"
+            android:background="@drawable/electricity_bg" />
 
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_electricity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/electricity_size" />
+
+            <TextView
+                android:id="@+id/tv_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/percent"
+                android:textColor="@color/white"
+                android:textSize="@dimen/percent_size" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/status_margin_bottom"
+            android:text="@string/status"
+            android:textColor="@color/status_color"
+            android:textSize="@dimen/status_size" />
+    </RelativeLayout>
 </RelativeLayout>

@@ -2,8 +2,21 @@
 <resources>
 
 
-    <dimen name="text_big">24sp</dimen>
-    <dimen name="text_mid">24sp</dimen>
+    <dimen name="zero_height">0dp</dimen>
+
+    <dimen name="top_radius">5dp</dimen>
+    <dimen name="bottom_radius">10dp</dimen>
+
+    <dimen name="company_margin_top">45dp</dimen>
+    <dimen name="title_margin_top">21dp</dimen>
+    <dimen name="status_margin_bottom">58dp</dimen>
+
+    <dimen name="title_size">24sp</dimen>
+    <dimen name="electricity_size">61sp</dimen>
+    <dimen name="percent_size">37sp</dimen>
+    <dimen name="status_size">33sp</dimen>
 
 
+    <dimen name="electricity_bg_width">504px</dimen>
+    <dimen name="electricity_bg_margin_bottom">418px</dimen>
 </resources>
