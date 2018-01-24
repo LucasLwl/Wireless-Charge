@@ -2,16 +2,14 @@ package com.phone.konka.wirelesscharge.Activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,19 +18,37 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.phone.konka.wirelesscharge.R;
-import com.phone.konka.wirelesscharge.Service.MyAccessibilityService;
-import com.phone.konka.wirelesscharge.Service.TimeService;
 
 public class MainActivity extends Activity {
 
+
+    /**
+     * 电量背景最大高度
+     */
     private static final int ELECTRICITY_BG_HEIGHT = 978;
 
+
+    /**
+     * 电量广播接收者
+     */
     private ElectricityReceiver mElectricityReceiver;
 
+
+    /**
+     * 显示电量TextView
+     */
     private TextView mTvElectricity;
 
+
+    /**
+     * 状态栏占位View
+     */
     private View mViewStatusBar;
 
+
+    /**
+     * 电量背景View
+     */
     private View mViewElectricity;
 
     @Override
@@ -48,15 +64,10 @@ public class MainActivity extends Activity {
         mElectricityReceiver = new ElectricityReceiver();
         registerReceiver(mElectricityReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-//        PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        openAccessibility();
+
     }
 
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService();
-    }
 
     @Override
     protected void onDestroy() {
@@ -71,19 +82,25 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             finish();
         }
-        return super.onTouchEvent(event);
+        return super.dispatchTouchEvent(ev);
     }
+
 
     /**
      * 初始化状态
      */
     private void initState() {
+//        设置不熄屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+//        设置底部导航栏透明
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+//        设置沉浸式状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
@@ -99,6 +116,7 @@ public class MainActivity extends Activity {
         mTvElectricity = (TextView) findViewById(R.id.tv_electricity);
         mViewElectricity = findViewById(R.id.view_electricity);
 
+//        设置字体
         Typeface arialBoldMT = Typeface.createFromAsset(getAssets(), "font/arial_boldmt.ttf");
         Typeface arialNarrow = Typeface.createFromAsset(getAssets(), "font/arial_narrow.ttf");
         Typeface msyi = Typeface.createFromAsset(getAssets(), "font/msyi.ttf");
@@ -121,24 +139,48 @@ public class MainActivity extends Activity {
         return result;
     }
 
-    private void startService() {
 
-        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        startActivity(intent);
+    /**
+     * 跳转到系统辅助功能设置
+     */
+    private void openAccessibility() {
+        if (!isAccessibilitySettingOn(this, getPackageName() + ".Service.TimerAccessibilityService")) {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            startActivity(intent);
+        }
+    }
 
-//        Intent intent = new Intent(this, MyAccessibilityService.class);
-////        startService(intent);
-//        bindService(intent, new ServiceConnection() {
-//            @Override
-//            public void onServiceConnected(ComponentName name, IBinder service) {
-//
-//            }
-//
-//            @Override
-//            public void onServiceDisconnected(ComponentName name) {
-//
-//            }
-//        }, BIND_AUTO_CREATE);
+
+    /**
+     * 检测是否已打开Accessibility服务
+     *
+     * @param context
+     * @param accessName
+     * @return
+     */
+    private boolean isAccessibilitySettingOn(Context context, String accessName) {
+
+        int accessibilityEnable = 0;
+        String serviceName = getPackageName() + "/" + accessName;
+        try {
+            accessibilityEnable = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (accessibilityEnable == 1) {
+            TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
+            String settingValue = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                mStringColonSplitter.setString(settingValue);
+                while (mStringColonSplitter.hasNext()) {
+                    String accessibilityService = mStringColonSplitter.next();
+                    if (accessibilityService.equalsIgnoreCase(serviceName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
