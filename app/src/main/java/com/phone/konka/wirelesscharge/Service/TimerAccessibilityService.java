@@ -109,9 +109,9 @@ public class TimerAccessibilityService extends AccessibilityService {
         return super.onKeyEvent(event);
     }
 
+
     @Override
     public void onInterrupt() {
-
     }
 
     @Override
@@ -226,6 +226,7 @@ public class TimerAccessibilityService extends AccessibilityService {
     private class TimerThread extends Thread {
         private boolean stop = false;
         private boolean flags = false;
+
 
         @Override
         public void run() {
