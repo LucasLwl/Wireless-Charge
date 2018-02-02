@@ -6,18 +6,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.phone.konka.wirelesscharge.R;
+import com.phone.konka.wirelesscharge.View.FrameSurfaceView;
 
 public class MainActivity extends Activity {
 
@@ -51,6 +51,13 @@ public class MainActivity extends Activity {
      */
     private View mViewElectricity;
 
+
+    private FrameSurfaceView mSfAnim;
+
+
+    private TextView mTvStatus;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +69,16 @@ public class MainActivity extends Activity {
         initView();
 
         mElectricityReceiver = new ElectricityReceiver();
-        registerReceiver(mElectricityReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(Intent.ACTION_POWER_CONNECTED);
+        filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
+        registerReceiver(mElectricityReceiver, filter);
+    }
 
-        openAccessibility();
-
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
 
@@ -73,20 +86,6 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mElectricityReceiver);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        finish();
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            finish();
-        }
-        return super.dispatchTouchEvent(ev);
     }
 
 
@@ -99,6 +98,8 @@ public class MainActivity extends Activity {
 
 //        设置底部导航栏透明
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE;
+//        getWindow().getDecorView().setSystemUiVisibility(uiOptions);
 
 //        设置沉浸式状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -113,6 +114,9 @@ public class MainActivity extends Activity {
 
     private void initView() {
 
+        mSfAnim = (FrameSurfaceView) findViewById(R.id.fsv_anim);
+
+        mTvStatus = (TextView) findViewById(R.id.tv_status);
         mTvElectricity = (TextView) findViewById(R.id.tv_electricity);
         mViewElectricity = findViewById(R.id.view_electricity);
 
@@ -123,7 +127,7 @@ public class MainActivity extends Activity {
 
         ((TextView) findViewById(R.id.tv_title)).setTypeface(arialBoldMT);
         ((TextView) findViewById(R.id.tv_percent)).setTypeface(arialNarrow);
-        ((TextView) findViewById(R.id.tv_status)).setTypeface(msyi);
+        mTvStatus.setTypeface(msyi);
         mTvElectricity.setTypeface(arialBoldMT);
     }
 
@@ -146,7 +150,8 @@ public class MainActivity extends Activity {
     private void openAccessibility() {
         if (!isAccessibilitySettingOn(this, getPackageName() + ".Service.TimerAccessibilityService")) {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            startActivity(intent);
+            if (intent.resolveActivity(getPackageManager()) != null)
+                startActivity(intent);
         }
     }
 
@@ -190,14 +195,39 @@ public class MainActivity extends Activity {
     private class ElectricityReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int current = intent.getExtras().getInt("level");
-            int total = intent.getExtras().getInt("scale");
-            int percent = current * 100 / total;
 
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mViewElectricity.getLayoutParams();
-            lp.height = percent * ELECTRICITY_BG_HEIGHT / 100;
-            mViewElectricity.setLayoutParams(lp);
-            mTvElectricity.setText(String.valueOf(percent));
+
+            String action = intent.getAction();
+            switch (action) {
+                case Intent.ACTION_BATTERY_CHANGED:
+                    int current = intent.getExtras().getInt("level");
+                    int total = intent.getExtras().getInt("scale");
+                    int percent = current * 100 / total;
+
+                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mViewElectricity.getLayoutParams();
+                    lp.height = percent * ELECTRICITY_BG_HEIGHT / 100;
+                    mViewElectricity.setLayoutParams(lp);
+                    mTvElectricity.setText(String.valueOf(percent));
+
+                    int status = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, BatteryManager.BATTERY_STATUS_UNKNOWN);
+                    boolean isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING);
+
+                    mSfAnim.setCharge(isCharging);
+                    if (isCharging)
+                        mTvStatus.setText("Charging");
+                    else
+                        mTvStatus.setText("Not Charging");
+                    break;
+
+                case Intent.ACTION_POWER_CONNECTED:
+                    mSfAnim.setCharge(true);
+                    mTvStatus.setText("Charging");
+                    break;
+                case Intent.ACTION_POWER_DISCONNECTED:
+                    mSfAnim.setCharge(false);
+                    mTvStatus.setText("Not Charging");
+                    break;
+            }
         }
     }
 }

@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <com.phone.konka.wirelesscharge.View.FrameSurfaceView
+        android:id="@+id/fsv_anim"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

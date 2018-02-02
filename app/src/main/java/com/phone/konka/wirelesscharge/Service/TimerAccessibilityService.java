@@ -7,12 +7,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.camera2.CameraManager;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -73,12 +76,40 @@ public class TimerAccessibilityService extends AccessibilityService {
     private BroadcastReceiver mReceiver;
 
 
+    /**
+     * 是否在拍照或录像
+     */
+    private boolean isUseCamera = false;
+
+    private CameraManager mCameraManager;
+
+    private CameraManager.AvailabilityCallback mCameraAvailabilityCallBack;
+
+
     @Override
     protected void onServiceConnected() {
+
+        mCameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        mCameraAvailabilityCallBack = new CameraManager.AvailabilityCallback() {
+            @Override
+            public void onCameraAvailable(@NonNull String cameraId) {
+                isUseCamera = false;
+                super.onCameraAvailable(cameraId);
+            }
+
+            @Override
+            public void onCameraUnavailable(@NonNull String cameraId) {
+                isUseCamera = true;
+                super.onCameraUnavailable(cameraId);
+            }
+        };
+        mCameraManager.registerAvailabilityCallback(mCameraAvailabilityCallBack, null);
+
         mLastTime = System.currentTimeMillis();
         registerBroadcastReceiver();
         judgeStartActivity();
         listenPhone();
+
         super.onServiceConnected();
     }
 
@@ -101,11 +132,9 @@ public class TimerAccessibilityService extends AccessibilityService {
     protected boolean onKeyEvent(KeyEvent event) {
 
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            return super.onKeyEvent(event);
+            mThread.unPark();
+            mLastTime = System.currentTimeMillis();
         }
-
-        mThread.unPark();
-        mLastTime = System.currentTimeMillis();
         return super.onKeyEvent(event);
     }
 
@@ -118,6 +147,7 @@ public class TimerAccessibilityService extends AccessibilityService {
     public boolean onUnbind(Intent intent) {
         mThread.stopTread();
         unregisterReceiver(mReceiver);
+        mCameraManager.unregisterAvailabilityCallback(mCameraAvailabilityCallBack);
         return super.onUnbind(intent);
     }
 
@@ -177,7 +207,8 @@ public class TimerAccessibilityService extends AccessibilityService {
      * 启动Activity
      */
     private void startScreenSaverOrNot() {
-        if (!isForeground(this, "com.phone.konka.wirelesscharge.Activity.MainActivity") && !isPlay(this) && !phoneRunning && mScreenIsOn) {
+        if (!isForeground(this, "com.phone.konka.wirelesscharge.Activity.MainActivity")
+                && !isPlay(this) && !phoneRunning && mScreenIsOn && !isUseCamera) {
             Intent start = new Intent(this, MainActivity.class);
             start.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.startActivity(start);
@@ -192,6 +223,8 @@ public class TimerAccessibilityService extends AccessibilityService {
      * @return
      */
     private boolean isPlay(Context context) {
+
+
         AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
         return audioManager.isMusicActive();
     }
@@ -276,10 +309,18 @@ public class TimerAccessibilityService extends AccessibilityService {
     class ScreenInfoBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF))
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+//                startScreenSaverOrNot();
                 mScreenIsOn = false;
-            else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON))
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON))
                 mScreenIsOn = true;
+        }
+    }
+
+    public static class CameraReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("lwl", intent.getAction());
         }
     }
 }

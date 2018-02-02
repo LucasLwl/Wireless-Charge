@@ -2,16 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.phone.konka.wirelesscharge">
 
-    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
 
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:persistent="true"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -25,27 +25,38 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".Service.TimerAccessibilityService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
+        <!--<service-->
+        <!--android:name=".Service.TimerAccessibilityService"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="true"-->
+        <!--android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.accessibilityservice.AccessibilityService" />-->
+        <!--</intent-filter>-->
 
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility" />
-        </service>
+        <!--<meta-data-->
+        <!--android:name="android.accessibilityservice"-->
+        <!--android:resource="@xml/accessibility" />-->
+        <!--</service>-->
 
-        <receiver android:name=".BroadcastReceiver.WirelessChargeReceiver">
-            <intent-filter>
+        <!--<receiver android:name=".BroadcastReceiver.WirelessChargeReceiver">-->
+        <!--<intent-filter>-->
 
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+        <!--<action android:name="android.intent.action.ACTION_POWER_CONNECTED" />-->
+        <!--<action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
 
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".Service.TimerAccessibilityService$CameraReceiver">-->
+        <!--<intent-filter android:priority="1000">-->
+        <!--<action android:name="android.hardware.action.NEW_VIDEO" />-->
+        <!--<data android:mimeType="video/*" />-->
+        <!--</intent-filter>-->
+
+        <!--<intent-filter android:priority="1000">-->
+        <!--<action android:name="android.hardware.action.NEW_PICTURE" />-->
+        <!--<data android:mimeType="image/*" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
     </application>
 </manifest>
