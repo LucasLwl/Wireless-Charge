@@ -9,8 +9,6 @@ import android.graphics.Typeface;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -147,13 +145,13 @@ public class MainActivity extends Activity {
     /**
      * 跳转到系统辅助功能设置
      */
-    private void openAccessibility() {
-        if (!isAccessibilitySettingOn(this, getPackageName() + ".Service.TimerAccessibilityService")) {
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            if (intent.resolveActivity(getPackageManager()) != null)
-                startActivity(intent);
-        }
-    }
+//    private void openAccessibility() {
+//        if (!isAccessibilitySettingOn(this, getPackageName() + ".Service.TimerAccessibilityService")) {
+//            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//            if (intent.resolveActivity(getPackageManager()) != null)
+//                startActivity(intent);
+//        }
+//    }
 
 
     /**
@@ -163,30 +161,30 @@ public class MainActivity extends Activity {
      * @param accessName
      * @return
      */
-    private boolean isAccessibilitySettingOn(Context context, String accessName) {
-
-        int accessibilityEnable = 0;
-        String serviceName = getPackageName() + "/" + accessName;
-        try {
-            accessibilityEnable = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (accessibilityEnable == 1) {
-            TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
-            String settingValue = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-            if (settingValue != null) {
-                mStringColonSplitter.setString(settingValue);
-                while (mStringColonSplitter.hasNext()) {
-                    String accessibilityService = mStringColonSplitter.next();
-                    if (accessibilityService.equalsIgnoreCase(serviceName)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+//    private boolean isAccessibilitySettingOn(Context context, String accessName) {
+//
+//        int accessibilityEnable = 0;
+//        String serviceName = getPackageName() + "/" + accessName;
+//        try {
+//            accessibilityEnable = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 0);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        if (accessibilityEnable == 1) {
+//            TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
+//            String settingValue = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+//            if (settingValue != null) {
+//                mStringColonSplitter.setString(settingValue);
+//                while (mStringColonSplitter.hasNext()) {
+//                    String accessibilityService = mStringColonSplitter.next();
+//                    if (accessibilityService.equalsIgnoreCase(serviceName)) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
 
     /**
@@ -209,7 +207,7 @@ public class MainActivity extends Activity {
                     mViewElectricity.setLayoutParams(lp);
                     mTvElectricity.setText(String.valueOf(percent));
 
-                    int status = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, BatteryManager.BATTERY_STATUS_UNKNOWN);
+                    int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
                     boolean isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING);
 
                     mSfAnim.setCharge(isCharging);

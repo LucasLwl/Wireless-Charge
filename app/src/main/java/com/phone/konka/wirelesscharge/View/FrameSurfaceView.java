@@ -198,9 +198,13 @@ public class FrameSurfaceView extends SurfaceView implements SurfaceHolder.Callb
      */
     private Bitmap loadPicture(Bitmap bitmap) {
         mOptions.inBitmap = bitmap;
-        bitmap = BitmapFactory.decodeResource(getResources(), mTypeArr.getResourceId(mCurrentIndex.get(), R.drawable.anim00), mOptions);
-        if (mCurrentIndex.incrementAndGet() == mTypeArr.length())
+        int index = mCurrentIndex.getAndIncrement();
+        if (index == mTypeArr.length() - 1)
             mCurrentIndex.set(0);
+//        bitmap = BitmapFactory.decodeResource(getResources(), mTypeArr.getResourceId(mCurrentIndex.get(), R.drawable.anim00), mOptions);
+        bitmap = BitmapFactory.decodeResource(getResources(), mTypeArr.getResourceId(index, R.drawable.anim00), mOptions);
+//        if (mCurrentIndex.incrementAndGet() == mTypeArr.length())
+//            mCurrentIndex.set(0);
         return bitmap;
     }
 
@@ -222,6 +226,7 @@ public class FrameSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void run() {
         long start;
+        sleep(mFrameSpaceTime);
         while (mIsDrawing) {
             if (isCharging) {
                 start = System.currentTimeMillis();
